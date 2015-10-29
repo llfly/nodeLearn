@@ -6,7 +6,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
+var settings = require('./settings');
+var flash = require('connect-flash');
 //var users = require('./routes/users');
+
+
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 
 //生成express实例app
 var app = express();
@@ -15,6 +21,20 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 //设置视图模板引擎为 ejs。
 app.set('view engine', 'ejs');
+
+app.use(flash());
+
+app.use(session({
+  secret:settings.cookieSecret,//防止篡改cookie
+  key:settings.db,//cookie名字
+  cookie:{maxAge:1000*60*60*24*30},//生存期30天
+  store:new MongoStore({//把会话信息存储到数据库
+    db:settings.db,
+    host:settings.host,
+    port:settings.port
+  })
+}))
+
 
 // 设置/public/favicon.ico为favicon图标
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
