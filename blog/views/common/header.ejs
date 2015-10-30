@@ -9,8 +9,13 @@
 
 <nav class='slideNav'>
     <span><a title="主页" href="/">home</a></span>
+    <% if (user) { %>
+    <span><a title="发表" href="/post">post</a></span>
+    <span><a title="登出" href="/logout">logout</a></span>
+    <% } else { %>
     <span><a title="登录" href="/login">login</a></span>
     <span><a title="注册" href="/reg">register</a></span>
+    <% } %>
 </nav>
 
 <div class="main">
@@ -18,3 +23,9 @@
         <h1><%= title %></h1>
     </header>
     <article>
+        <% if (success) { %>
+        <div><%= success %></div>
+        <% } %>
+        <% if (error) { %>
+        <div><%= error %> </div>
+<% } %>
